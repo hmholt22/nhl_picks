@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NHL Playoff Picks 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ice: #e8f4f8;
+    --deep-ice: #c5dde8;
+    --rink: #0a1628;
+    --rink-mid: #0f2040;
+    --rink-line: #1a3a6b;
+    --gold: #f0b429;
+    --gold-dim: #b8891f;
+    --red-line: #e53e3e;
+    --blue-line: #2b6cb0;
+    --text-main: #e8f4f8;
+    --text-dim: #7a9ab5;
+    --correct: #38a169;
+    --wrong: #e53e3e;
+    --pending: #d69e2e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--rink);
+    font-family: 'Barlow', sans-serif;
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Rink ice texture background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 40% at 50% 0%, rgba(30,80,160,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 30% at 50% 100%, rgba(10,40,100,0.22) 0%, transparent 70%),
+      repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(255,255,255,0.02) 59px, rgba(255,255,255,0.02) 60px),
+      repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(255,255,255,0.015) 59px, rgba(255,255,255,0.015) 60px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Center ice circle decoration */
+  body::after {
+    content: '';
+    position: fixed;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    border: 2px solid rgba(240,180,41,0.06);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 0;
+    box-shadow: 0 0 0 60px rgba(240,180,41,0.02), 0 0 0 120px rgba(240,180,41,0.01);
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+  }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    padding: 48px 0 36px;
+    position: relative;
+  }
+
+  .title-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+    opacity: 0.9;
+  }
+
+  h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(42px, 7vw, 80px);
+    line-height: 0.9;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    color: var(--text-main);
+  }
+
+  h1 .accent {
+    color: var(--gold);
+    display: block;
+  }
+
+  .header-rule {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 20px auto 0;
+    max-width: 400px;
+  }
+
+  .header-rule .line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  }
+
+  .header-rule .puck {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 8px var(--gold);
+  }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin: 24px 0 36px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+  }
+
+  .legend-dot.correct { background: var(--correct); }
+  .legend-dot.wrong { background: var(--wrong); }
+  .legend-dot.pending { background: var(--pending); }
+
+  /* CONFERENCE SECTIONS */
+  .conference-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--blue-line);
+    text-align: center;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .conference-label::before,
+  .conference-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rink-line);
+  }
+
+  /* SERIES GRID */
+  .series-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  @media (max-width: 640px) {
+    .series-grid { grid-template-columns: 1fr; }
+  }
+
+  /* SERIES CARD */
+  .series-card {
+    background: var(--rink-mid);
+    border: 1px solid var(--rink-line);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .series-card:hover {
+    border-color: rgba(240,180,41,0.3);
+  }
+
+  /* Series header */
+  .series-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px 10px;
+    border-bottom: 1px solid var(--rink-line);
+    background: rgba(0,0,0,0.2);
+  }
+
+  .matchup {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.02em;
+  }
+
+  .team-badge {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+  }
+
+  .matchup-vs {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+  }
+
+  .series-status {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.05);
+    color: var(--text-dim);
+    border: 1px solid var(--rink-line);
+  }
+
+  .series-status.live {
+    color: var(--red-line);
+    border-color: var(--red-line);
+    background: rgba(229,62,62,0.08);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  /* Picks rows */
+  .picks-body {
+    padding: 10px 0 6px;
+  }
+
+  .pick-row {
+    display: grid;
+    grid-template-columns: 70px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 16px;
+    border-bottom: 1px solid rgba(26,58,107,0.4);
+    transition: background 0.15s;
+  }
+
+  .pick-row:last-child { border-bottom: none; }
+  .pick-row:hover { background: rgba(255,255,255,0.02); }
+
+  .picker-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .pick-detail {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .pick-winner {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+  }
+
+  .pick-games {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-dim);
+    background: rgba(255,255,255,0.05);
+    padding: 2px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+  }
+
+  .pick-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .pick-indicator.correct { background: var(--correct); box-shadow: 0 0 6px var(--correct); }
+  .pick-indicator.wrong { background: var(--wrong); box-shadow: 0 0 6px var(--wrong); }
+  .pick-indicator.pending { background: var(--pending); opacity: 0.6; }
+
+  /* SCOREBOARD */
+  .scoreboard {
+    margin-top: 40px;
+    background: var(--rink-mid);
+    border: 1px solid var(--rink-line);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .scoreboard-header {
+    background: rgba(0,0,0,0.3);
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--rink-line);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .scoreboard-header h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .scoreboard-header .trophy {
+    font-size: 20px;
+  }
+
+  .scores-table {
+    width: 100%;
+  }
+
+  .scores-table th {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 12px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--rink-line);
+    background: rgba(0,0,0,0.15);
+  }
+
+  .scores-table th:not(:first-child) { text-align: center; }
+
+  .scores-table td {
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(26,58,107,0.3);
+    font-size: 15px;
+  }
+
+  .scores-table td:not(:first-child) { text-align: center; }
+
+  .scores-table tr:last-child td { border-bottom: none; }
+
+  .scores-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .player-rank {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 24px;
+    color: var(--text-dim);
+    width: 28px;
+    display: inline-block;
+    text-align: right;
+    margin-right: 10px;
+  }
+
+  .player-rank.r1 { color: var(--gold); }
+  .player-rank.r2 { color: #a0aec0; }
+  .player-rank.r3 { color: #c05621; }
+
+  .player-cell-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 0.04em;
+  }
+
+  .score-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+  }
+
+  .score-num.best { color: var(--correct); }
+
+  .score-bar-cell { min-width: 80px; }
+
+  @media (max-width: 520px) {
+    .scores-table th.hide-mobile,
+    .scores-table td.hide-mobile { display: none; }
+    .scores-table th, .scores-table td { padding: 10px 10px; }
+    .score-bar-cell { min-width: 50px; }
+    .player-cell-name { font-size: 17px; }
+    .player-rank { font-size: 20px; margin-right: 6px; }
+    .score-num { font-size: 17px; }
+  }
+
+  .score-bar {
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.05);
+    overflow: hidden;
+    margin-top: 4px;
+  }
+
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--blue-line), var(--gold));
+    transition: width 0.8s ease;
+  }
+
+  /* Note */
+  .note {
+    text-align: center;
+    margin-top: 28px;
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+
+  /* Team color classes */
+  .col { background: #6f263d; color: #fff; }
+  .lak { background: #111; color: #a2aaad; }
+  .dal { background: #006847; color: #fff; }
+  .min { background: #154734; color: #ddaf39; }
+  .vgk { background: #333f48; color: #b4975a; }
+  .uta { background: #010101; color: #fff; }
+  .ana { background: #f47a38; color: #fff; }
+  .edm { background: #00205b; color: #ff4c00; }
+  .buf { background: #002654; color: #fcb514; }
+  .bos { background: #000; color: #fcb514; }
+  .tbl { background: #002868; color: #fff; }
+  .mtl { background: #af1e2d; color: #fff; }
+  .car { background: #cc0000; color: #fff; }
+  .ott { background: #000; color: #e31837; }
+  .pit { background: #000; color: #fcb514; }
+  .phi { background: #f74902; color: #fff; }
+
+  .section-gap { margin-bottom: 28px; }
+
+  /* Fade-in animation */
+  .series-card {
+    animation: fadeUp 0.4s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .series-grid .series-card:nth-child(1) { animation-delay: 0.05s; }
+  .series-grid .series-card:nth-child(2) { animation-delay: 0.1s; }
+  .series-grid .series-card:nth-child(3) { animation-delay: 0.15s; }
+  .series-grid .series-card:nth-child(4) { animation-delay: 0.2s; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="title-eyebrow">Stanley Cup Playoffs</div>
+    <h1>Playoff<span class="accent">Picks</span></h1>
+    <div class="header-rule">
+      <div class="line"></div>
+      <div class="puck"></div>
+      <div class="line"></div>
+    </div>
+  </header>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot correct"></div> Correct</div>
+    <div class="legend-item"><div class="legend-dot wrong"></div> Incorrect</div>
+    <div class="legend-item"><div class="legend-dot pending"></div> Pending</div>
+  </div>
+
+  <!-- WESTERN CONFERENCE -->
+  <div class="conference-label">Western Conference · First Round</div>
+
+  <div class="series-grid section-gap">
+
+    <div class="series-card">
+      <div class="series-header">
+        <div class="matchup">
+          <span class="team-badge col">COL</span>
+          <span class="matchup-vs">vs</span>
+          <span class="team-badge lak">LAK</span>
+        </div>
+        <div class="series-status">Pending</div>
+      </div>
+      <div class="picks-body">
+        <div class="pick-row">
+          <div class="picker-name">Harlan</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#c4a0ac">COL</span>
+            <span class="pick-games">in 6</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+        <div class="pick-row">
+          <div class="picker-name">Ashtin</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#c4a0ac">COL</span>
+            <span class="pick-games">in 4</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+        <div class="pick-row">
+          <div class="picker-name">Sean</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#c4a0ac">COL</span>
+            <span class="pick-games">in 4</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="series-card">
+      <div class="series-header">
+        <div class="matchup">
+          <span class="team-badge dal">DAL</span>
+          <span class="matchup-vs">vs</span>
+          <span class="team-badge min">MIN</span>
+        </div>
+        <div class="series-status">Pending</div>
+      </div>
+      <div class="picks-body">
+        <div class="pick-row">
+          <div class="picker-name">Harlan</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#7ab89a">DAL</span>
+            <span class="pick-games">in 5</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+        <div class="pick-row">
+          <div class="picker-name">Ashtin</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#7ab89a">DAL</span>
+            <span class="pick-games">in 6</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+        <div class="pick-row">
+          <div class="picker-name">Sean</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#7ab89a">DAL</span>
+            <span class="pick-games">in 6</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="series-card">
+      <div class="series-header">
+        <div class="matchup">
+          <span class="team-badge vgk">VGK</span>
+          <span class="matchup-vs">vs</span>
+          <span class="team-badge uta">UTA</span>
+        </div>
+        <div class="series-status">Pending</div>
+      </div>
+      <div class="picks-body">
+        <div class="pick-row">
+          <div class="picker-name">Harlan</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#c8ba8e">VGK</span>
+            <span class="pick-games">in 7</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+        <div class="pick-row">
+          <div class="picker-name">Ashtin</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#999">UTA</span>
+            <span class="pick-games">in 7</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+        <div class="pick-row">
+          <div class="picker-name">Sean</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#c8ba8e">VGK</span>
+            <span class="pick-games">in 7</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="series-card">
+      <div class="series-header">
+        <div class="matchup">
+          <span class="team-badge ana">ANA</span>
+          <span class="matchup-vs">vs</span>
+          <span class="team-badge edm">EDM</span>
+        </div>
+        <div class="series-status">Pending</div>
+      </div>
+      <div class="picks-body">
+        <div class="pick-row">
+          <div class="picker-name">Harlan</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#f7a878">ANA</span>
+            <span class="pick-games">in 6</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+        <div class="pick-row">
+          <div class="picker-name">Ashtin</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#f7a878">ANA</span>
+            <span class="pick-games">in 6</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+        <div class="pick-row">
+          <div class="picker-name">Sean</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#ff7033">EDM</span>
+            <span class="pick-games">in 6</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- EASTERN CONFERENCE -->
+  <div class="conference-label">Eastern Conference · First Round</div>
+
+  <div class="series-grid section-gap">
+
+    <div class="series-card">
+      <div class="series-header">
+        <div class="matchup">
+          <span class="team-badge buf">BUF</span>
+          <span class="matchup-vs">vs</span>
+          <span class="team-badge bos">BOS</span>
+        </div>
+        <div class="series-status">Pending</div>
+      </div>
+      <div class="picks-body">
+        <div class="pick-row">
+          <div class="picker-name">Harlan</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#fcb514">BUF</span>
+            <span class="pick-games">in 6</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+        <div class="pick-row">
+          <div class="picker-name">Ashtin</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#fcb514">BUF</span>
+            <span class="pick-games">in 7</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+        <div class="pick-row">
+          <div class="picker-name">Sean</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#fcb514">BUF</span>
+            <span class="pick-games">in 7</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="series-card">
+      <div class="series-header">
+        <div class="matchup">
+          <span class="team-badge tbl">TBL</span>
+          <span class="matchup-vs">vs</span>
+          <span class="team-badge mtl">MTL</span>
+        </div>
+        <div class="series-status">Pending</div>
+      </div>
+      <div class="picks-body">
+        <div class="pick-row">
+          <div class="picker-name">Harlan</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#8ab0e0">TBL</span>
+            <span class="pick-games">in 5</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+        <div class="pick-row">
+          <div class="picker-name">Ashtin</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#8ab0e0">TBL</span>
+            <span class="pick-games">in 6</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+        <div class="pick-row">
+          <div class="picker-name">Sean</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#d08090">MTL</span>
+            <span class="pick-games">in 7</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="series-card">
+      <div class="series-header">
+        <div class="matchup">
+          <span class="team-badge car">CAR</span>
+          <span class="matchup-vs">vs</span>
+          <span class="team-badge ott">OTT</span>
+        </div>
+        <div class="series-status">Pending</div>
+      </div>
+      <div class="picks-body">
+        <div class="pick-row">
+          <div class="picker-name">Harlan</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#ff6666">CAR</span>
+            <span class="pick-games">in 6</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+        <div class="pick-row">
+          <div class="picker-name">Ashtin</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#ff6666">CAR</span>
+            <span class="pick-games">in 5</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+        <div class="pick-row">
+          <div class="picker-name">Sean</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#ff6666">CAR</span>
+            <span class="pick-games">in 6</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="series-card">
+      <div class="series-header">
+        <div class="matchup">
+          <span class="team-badge pit">PIT</span>
+          <span class="matchup-vs">vs</span>
+          <span class="team-badge phi">PHI</span>
+        </div>
+        <div class="series-status">Pending</div>
+      </div>
+      <div class="picks-body">
+        <div class="pick-row">
+          <div class="picker-name">Harlan</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#fcb514">PIT</span>
+            <span class="pick-games">in 7</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+        <div class="pick-row">
+          <div class="picker-name">Ashtin</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#fcb514">PIT</span>
+            <span class="pick-games">in 6</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+        <div class="pick-row">
+          <div class="picker-name">Sean</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:#f78050">PHI</span>
+            <span class="pick-games">in 7</span>
+          </div>
+          <div class="pick-indicator pending"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SCOREBOARD -->
+  <div class="scoreboard">
+    <div class="scoreboard-header">
+      <span class="trophy">🏒</span>
+      <h2>Standings</h2>
+    </div>
+    <table class="scores-table">
+      <thead>
+        <tr>
+          <th>Player</th>
+          <th class="hide-mobile">Winner</th>
+          <th class="hide-mobile">Bonus</th>
+          <th class="hide-mobile">Consol.</th>
+          <th>Rd 1</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody id="standings-body">
+        <!-- Populated by JS -->
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">Correct winner = 5 pts · Exact games = +3 · Off by 1 = +2 · Off by 2 = +1 · Picked 7, series goes 7 (wrong team) = +2 consolation</div>
+
+</div>
+
+<script>
+// ──────────────────────────────────────────────
+// DATA
+// ──────────────────────────────────────────────
+const series = [
+  // WEST
+  { id:'col-lak', team1:'COL', team2:'LAK', winner: null, games: null },
+  { id:'dal-min', team1:'DAL', team2:'MIN', winner: null, games: null },
+  { id:'vgk-uta', team1:'VGK', team2:'UTA', winner: null, games: null },
+  { id:'ana-edm', team1:'ANA', team2:'EDM', winner: null, games: null },
+  // EAST
+  { id:'buf-bos', team1:'BUF', team2:'BOS', winner: null, games: null },
+  { id:'tbl-mtl', team1:'TBL', team2:'MTL', winner: null, games: null },
+  { id:'car-ott', team1:'CAR', team2:'OTT', winner: null, games: null },
+  { id:'pit-phi', team1:'PIT', team2:'PHI', winner: null, games: null },
+];
+
+const picks = {
+  Harlan: [
+    { seriesId:'col-lak', winner:'COL', games:6 },
+    { seriesId:'dal-min', winner:'DAL', games:5 },
+    { seriesId:'vgk-uta', winner:'VGK', games:7 },
+    { seriesId:'ana-edm', winner:'ANA', games:6 },
+    { seriesId:'buf-bos', winner:'BUF', games:6 },
+    { seriesId:'tbl-mtl', winner:'TBL', games:5 },
+    { seriesId:'car-ott', winner:'CAR', games:6 },
+    { seriesId:'pit-phi', winner:'PIT', games:7 },
+  ],
+  Ashtin: [
+    { seriesId:'col-lak', winner:'COL', games:4 },
+    { seriesId:'dal-min', winner:'DAL', games:6 },
+    { seriesId:'vgk-uta', winner:'UTA', games:7 },
+    { seriesId:'ana-edm', winner:'ANA', games:6 },
+    { seriesId:'buf-bos', winner:'BUF', games:7 },
+    { seriesId:'tbl-mtl', winner:'TBL', games:6 },
+    { seriesId:'car-ott', winner:'CAR', games:5 },
+    { seriesId:'pit-phi', winner:'PIT', games:6 },
+  ],
+  Sean: [
+    { seriesId:'col-lak', winner:'COL', games:4 },
+    { seriesId:'dal-min', winner:'DAL', games:6 },
+    { seriesId:'vgk-uta', winner:'VGK', games:7 },
+    { seriesId:'ana-edm', winner:'EDM', games:6 },
+    { seriesId:'buf-bos', winner:'BUF', games:7 },
+    { seriesId:'tbl-mtl', winner:'MTL', games:7 },
+    { seriesId:'car-ott', winner:'CAR', games:6 },
+    { seriesId:'pit-phi', winner:'PHI', games:7 },
+  ],
+};
+
+const players = ['Harlan', 'Ashtin', 'Sean'];
+const MAX_POINTS = series.length * 8; // max per series: 5 winner + 3 exact games
+
+// Scoring:
+//   Correct winner:  5 pts
+//   Games bonus (if winner correct): exact=+3, off by 1=+2, off by 2=+1
+//   Consolation: picked 7 games AND series goes 7, even if wrong team: +2
+function calcScore(player) {
+  let winnerPts = 0, bonusPts = 0, consolationPts = 0;
+  picks[player].forEach(pick => {
+    const s = series.find(x => x.id === pick.seriesId);
+    if (!s || s.winner === null) return;
+
+    if (pick.winner === s.winner) {
+      winnerPts += 5;
+      const diff = Math.abs(pick.games - s.games);
+      if (diff === 0) bonusPts += 3;
+      else if (diff === 1) bonusPts += 2;
+      else if (diff === 2) bonusPts += 1;
+    } else {
+      // Consolation: wrong winner but both picked and actual series = 7
+      if (pick.games === 7 && s.games === 7) consolationPts += 2;
+    }
+  });
+  const total = winnerPts + bonusPts + consolationPts;
+  // grandTotal = sum across all rounds (Round 2+ will be added here later)
+  const grandTotal = total;
+  return { winnerPts, bonusPts, consolationPts, total, grandTotal };
+}
+
+function renderStandings() {
+  const scores = players.map(p => ({ name: p, ...calcScore(p) }));
+  scores.sort((a, b) => b.total - a.total);
+  const rankClasses = ['r1', 'r2', 'r3'];
+
+  const tbody = document.getElementById('standings-body');
+  tbody.innerHTML = scores.map((s, i) => `
+    <tr>
+      <td>
+        <span class="player-rank ${rankClasses[i]}">${i + 1}</span>
+        <span class="player-cell-name">${s.name}</span>
+      </td>
+      <td class="hide-mobile"><span class="score-num">${s.winnerPts}</span></td>
+      <td class="hide-mobile"><span class="score-num">${s.bonusPts}</span></td>
+      <td class="hide-mobile"><span class="score-num">${s.consolationPts}</span></td>
+      <td><span class="score-num">${s.total}</span></td>
+      <td><span class="score-num ${i === 0 ? 'best' : ''}">${s.grandTotal}</span></td>
+    </tr>
+  `).join('');
+}
+
+renderStandings();
+</script>
+</body>
+</html>

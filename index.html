@@ -264,6 +264,57 @@
     50% { opacity: 0.6; }
   }
 
+  .game-badges {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--rink-line);
+    background: rgba(0,0,0,0.12);
+  }
+
+  .game-badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    opacity: 0.92;
+  }
+
+  .game-badge-num {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--text-dim);
+    align-self: center;
+    margin-right: 1px;
+  }
+
+  .game-badge-ot {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    background: rgba(240,180,41,0.12);
+    padding: 1px 4px;
+    border-radius: 3px;
+    border: 1px solid rgba(240,180,41,0.3);
+  }
+
+  .game-badge-wrap {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 6px 2px 0;
+    border-right: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .game-badge-wrap:last-child {
+    border-right: none;
+  }
+
   /* Picks rows */
   .picks-body {
     padding: 10px 0 6px;
@@ -507,317 +558,14 @@
     <div class="legend-item"><div class="legend-dot pending"></div> Pending</div>
   </div>
 
-  <!-- WESTERN CONFERENCE -->
-  <div class="conference-label">Western Conference · First Round</div>
+  <!-- SERIES CARDS — rendered by JS -->
+  <div id="west-label" class="conference-label">Western Conference · First Round</div>
+  <div id="west-grid" class="series-grid section-gap"></div>
 
-  <div class="series-grid section-gap">
+  <div id="east-label" class="conference-label">Eastern Conference · First Round</div>
+  <div id="east-grid" class="series-grid section-gap"></div>
 
-    <div class="series-card">
-      <div class="series-header">
-        <div class="matchup">
-          <span class="team-badge col">COL</span>
-          <span class="matchup-vs">vs</span>
-          <span class="team-badge lak">LAK</span>
-        </div>
-        <div class="series-status">Pending</div>
-      </div>
-      <div class="picks-body">
-        <div class="pick-row">
-          <div class="picker-name">Harlan</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#c4a0ac">COL</span>
-            <span class="pick-games">in 6</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-        <div class="pick-row">
-          <div class="picker-name">Ashtin</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#c4a0ac">COL</span>
-            <span class="pick-games">in 4</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-        <div class="pick-row">
-          <div class="picker-name">Sean</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#c4a0ac">COL</span>
-            <span class="pick-games">in 4</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="series-card">
-      <div class="series-header">
-        <div class="matchup">
-          <span class="team-badge dal">DAL</span>
-          <span class="matchup-vs">vs</span>
-          <span class="team-badge min">MIN</span>
-        </div>
-        <div class="series-status">Pending</div>
-      </div>
-      <div class="picks-body">
-        <div class="pick-row">
-          <div class="picker-name">Harlan</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#7ab89a">DAL</span>
-            <span class="pick-games">in 5</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-        <div class="pick-row">
-          <div class="picker-name">Ashtin</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#7ab89a">DAL</span>
-            <span class="pick-games">in 6</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-        <div class="pick-row">
-          <div class="picker-name">Sean</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#7ab89a">DAL</span>
-            <span class="pick-games">in 6</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="series-card">
-      <div class="series-header">
-        <div class="matchup">
-          <span class="team-badge vgk">VGK</span>
-          <span class="matchup-vs">vs</span>
-          <span class="team-badge uta">UTA</span>
-        </div>
-        <div class="series-status">Pending</div>
-      </div>
-      <div class="picks-body">
-        <div class="pick-row">
-          <div class="picker-name">Harlan</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#c8ba8e">VGK</span>
-            <span class="pick-games">in 7</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-        <div class="pick-row">
-          <div class="picker-name">Ashtin</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#999">UTA</span>
-            <span class="pick-games">in 7</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-        <div class="pick-row">
-          <div class="picker-name">Sean</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#c8ba8e">VGK</span>
-            <span class="pick-games">in 7</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="series-card">
-      <div class="series-header">
-        <div class="matchup">
-          <span class="team-badge ana">ANA</span>
-          <span class="matchup-vs">vs</span>
-          <span class="team-badge edm">EDM</span>
-        </div>
-        <div class="series-status">Pending</div>
-      </div>
-      <div class="picks-body">
-        <div class="pick-row">
-          <div class="picker-name">Harlan</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#f7a878">ANA</span>
-            <span class="pick-games">in 6</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-        <div class="pick-row">
-          <div class="picker-name">Ashtin</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#f7a878">ANA</span>
-            <span class="pick-games">in 6</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-        <div class="pick-row">
-          <div class="picker-name">Sean</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#ff7033">EDM</span>
-            <span class="pick-games">in 6</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- EASTERN CONFERENCE -->
-  <div class="conference-label">Eastern Conference · First Round</div>
-
-  <div class="series-grid section-gap">
-
-    <div class="series-card">
-      <div class="series-header">
-        <div class="matchup">
-          <span class="team-badge buf">BUF</span>
-          <span class="matchup-vs">vs</span>
-          <span class="team-badge bos">BOS</span>
-        </div>
-        <div class="series-status">Pending</div>
-      </div>
-      <div class="picks-body">
-        <div class="pick-row">
-          <div class="picker-name">Harlan</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#fcb514">BUF</span>
-            <span class="pick-games">in 6</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-        <div class="pick-row">
-          <div class="picker-name">Ashtin</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#fcb514">BUF</span>
-            <span class="pick-games">in 7</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-        <div class="pick-row">
-          <div class="picker-name">Sean</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#fcb514">BUF</span>
-            <span class="pick-games">in 7</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="series-card">
-      <div class="series-header">
-        <div class="matchup">
-          <span class="team-badge tbl">TBL</span>
-          <span class="matchup-vs">vs</span>
-          <span class="team-badge mtl">MTL</span>
-        </div>
-        <div class="series-status">Pending</div>
-      </div>
-      <div class="picks-body">
-        <div class="pick-row">
-          <div class="picker-name">Harlan</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#8ab0e0">TBL</span>
-            <span class="pick-games">in 5</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-        <div class="pick-row">
-          <div class="picker-name">Ashtin</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#8ab0e0">TBL</span>
-            <span class="pick-games">in 6</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-        <div class="pick-row">
-          <div class="picker-name">Sean</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#d08090">MTL</span>
-            <span class="pick-games">in 7</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="series-card">
-      <div class="series-header">
-        <div class="matchup">
-          <span class="team-badge car">CAR</span>
-          <span class="matchup-vs">vs</span>
-          <span class="team-badge ott">OTT</span>
-        </div>
-        <div class="series-status">Pending</div>
-      </div>
-      <div class="picks-body">
-        <div class="pick-row">
-          <div class="picker-name">Harlan</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#ff6666">CAR</span>
-            <span class="pick-games">in 6</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-        <div class="pick-row">
-          <div class="picker-name">Ashtin</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#ff6666">CAR</span>
-            <span class="pick-games">in 5</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-        <div class="pick-row">
-          <div class="picker-name">Sean</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#ff6666">CAR</span>
-            <span class="pick-games">in 6</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="series-card">
-      <div class="series-header">
-        <div class="matchup">
-          <span class="team-badge pit">PIT</span>
-          <span class="matchup-vs">vs</span>
-          <span class="team-badge phi">PHI</span>
-        </div>
-        <div class="series-status">Pending</div>
-      </div>
-      <div class="picks-body">
-        <div class="pick-row">
-          <div class="picker-name">Harlan</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#fcb514">PIT</span>
-            <span class="pick-games">in 7</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-        <div class="pick-row">
-          <div class="picker-name">Ashtin</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#fcb514">PIT</span>
-            <span class="pick-games">in 6</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-        <div class="pick-row">
-          <div class="picker-name">Sean</div>
-          <div class="pick-detail">
-            <span class="pick-winner" style="color:#f78050">PHI</span>
-            <span class="pick-games">in 7</span>
-          </div>
-          <div class="pick-indicator pending"></div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- SCOREBOARD -->
+    <!-- SCOREBOARD -->
   <div class="scoreboard">
     <div class="scoreboard-header">
       <span class="trophy">🏒</span>
@@ -850,15 +598,31 @@
 // ──────────────────────────────────────────────
 const series = [
   // WEST
-  { id:'col-lak', team1:'COL', team2:'LAK', winner: null, games: null },
-  { id:'dal-min', team1:'DAL', team2:'MIN', winner: null, games: null },
-  { id:'vgk-uta', team1:'VGK', team2:'UTA', winner: null, games: null },
-  { id:'ana-edm', team1:'ANA', team2:'EDM', winner: null, games: null },
+  { id:'col-lak', team1:'COL', team2:'LAK', winner: null, games: null, score: {COL:0, LAK:0},
+    gameWinners: [],
+    gameScores:  [] },
+  { id:'dal-min', team1:'DAL', team2:'MIN', winner: null, games: null, score: {DAL:0, MIN:1},
+    gameWinners: ['MIN'],
+    gameScores:  ['6–1'] },
+  { id:'vgk-uta', team1:'VGK', team2:'UTA', winner: null, games: null, score: {VGK:0, UTA:0},
+    gameWinners: [],
+    gameScores:  [] },
+  { id:'ana-edm', team1:'ANA', team2:'EDM', winner: null, games: null, score: {ANA:0, EDM:0},
+    gameWinners: [],
+    gameScores:  [] },
   // EAST
-  { id:'buf-bos', team1:'BUF', team2:'BOS', winner: null, games: null },
-  { id:'tbl-mtl', team1:'TBL', team2:'MTL', winner: null, games: null },
-  { id:'car-ott', team1:'CAR', team2:'OTT', winner: null, games: null },
-  { id:'pit-phi', team1:'PIT', team2:'PHI', winner: null, games: null },
+  { id:'buf-bos', team1:'BUF', team2:'BOS', winner: null, games: null, score: {BUF:0, BOS:0},
+    gameWinners: [],
+    gameScores:  [] },
+  { id:'tbl-mtl', team1:'TBL', team2:'MTL', winner: null, games: null, score: {TBL:0, MTL:0},
+    gameWinners: [],
+    gameScores:  [] },
+  { id:'car-ott', team1:'CAR', team2:'OTT', winner: null, games: null, score: {CAR:1, OTT:0},
+    gameWinners: ['CAR'],
+    gameScores:  ['2–0'] },
+  { id:'pit-phi', team1:'PIT', team2:'PHI', winner: null, games: null, score: {PIT:0, PHI:1},
+    gameWinners: ['PHI'],
+    gameScores:  ['3–2'] },
 ];
 
 const picks = {
@@ -924,6 +688,106 @@ function calcScore(player) {
   return { winnerPts, bonusPts, consolationPts, total, grandTotal };
 }
 
+// Team color map for pick winner text colors
+const teamColors = {
+  COL:'#c4a0ac', LAK:'#a2aaad', DAL:'#7ab89a', MIN:'#ddaf39',
+  VGK:'#c8ba8e', UTA:'#aaa', ANA:'#f7a878', EDM:'#ff7033',
+  BUF:'#fcb514', BOS:'#fcb514', TBL:'#8ab0e0', MTL:'#d08090',
+  CAR:'#ff6666', OTT:'#e31837', PIT:'#fcb514', PHI:'#f78050',
+};
+
+// Team CSS class map for badges
+const teamClass = {
+  COL:'col', LAK:'lak', DAL:'dal', MIN:'min', VGK:'vgk', UTA:'uta',
+  ANA:'ana', EDM:'edm', BUF:'buf', BOS:'bos', TBL:'tbl', MTL:'mtl',
+  CAR:'car', OTT:'ott', PIT:'pit', PHI:'phi',
+};
+
+function getPickIndicator(pick, s) {
+  if (!s.winner) return 'pending';
+  if (pick.winner === s.winner) return 'correct';
+  if (pick.games === 7 && s.games === 7) return 'consolation';
+  return 'wrong';
+}
+
+function renderGameBadges(s) {
+  if (!s.gameWinners || s.gameWinners.length === 0) return '';
+  const badges = s.gameWinners.map((team, i) => {
+    const raw = s.gameScores ? s.gameScores[i] : '';
+    const otMatch = raw.match(/\(([^)]+)\)/);
+    const otSuffix = otMatch ? ` (${otMatch[1]})` : '';
+    const scoreOnly = raw.replace(/\s*\([^)]+\)/, '').trim();
+    const label = scoreOnly ? `${team} ${scoreOnly}${otSuffix}` : team;
+    return `
+    <div class="game-badge-wrap">
+      <span class="game-badge-num">G${i+1}</span>
+      <span class="game-badge ${teamClass[team]}">${label}</span>
+    </div>`;
+  }).join('');
+  return `<div class="game-badges">${badges}</div>`;
+}
+
+function getStatusHTML(s) {
+  if (s.winner) {
+    return `<div class="series-status" style="color:var(--correct);border-color:var(--correct);background:rgba(56,161,105,0.1)">${s.winner} wins ✓</div>`;
+  }
+  if (s.gameWinners && s.gameWinners.length > 0) {
+    // count wins per team
+    const w = {};
+    s.gameWinners.forEach(t => w[t] = (w[t]||0)+1);
+    const teams = Object.keys(w);
+    if (teams.length === 1) {
+      return `<div class="series-status live">${teams[0]} leads ${w[teams[0]]}–0</div>`;
+    }
+    const [t1, t2] = [s.team1, s.team2];
+    const s1 = w[t1]||0, s2 = w[t2]||0;
+    if (s1 === s2) return `<div class="series-status live">Tied ${s1}–${s2}</div>`;
+    const leader = s1 > s2 ? t1 : t2;
+    return `<div class="series-status live">${leader} leads ${Math.max(s1,s2)}–${Math.min(s1,s2)}</div>`;
+  }
+  return `<div class="series-status">Pending</div>`;
+}
+
+function renderCards(seriesIds, containerId) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = seriesIds.map(id => {
+    const s = series.find(x => x.id === id);
+    const playerList = players.map(player => {
+      const pick = picks[player].find(p => p.seriesId === id);
+      const ind = getPickIndicator(pick, s);
+      const indClass = ind === 'consolation' ? 'correct' : ind;
+      return `
+        <div class="pick-row">
+          <div class="picker-name">${player}</div>
+          <div class="pick-detail">
+            <span class="pick-winner" style="color:${teamColors[pick.winner]}">${pick.winner}</span>
+            <span class="pick-games">in ${pick.games}</span>
+          </div>
+          <div class="pick-indicator ${indClass}"></div>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="series-card">
+        <div class="series-header">
+          <div class="matchup">
+            <span class="team-badge ${teamClass[s.team1]}">${s.team1}</span>
+            <span class="matchup-vs">vs</span>
+            <span class="team-badge ${teamClass[s.team2]}">${s.team2}</span>
+          </div>
+          ${getStatusHTML(s)}
+        </div>
+        ${renderGameBadges(s)}
+        <div class="picks-body">${playerList}</div>
+      </div>`;
+  }).join('');
+}
+
+function renderAllCards() {
+  renderCards(['col-lak','dal-min','vgk-uta','ana-edm'], 'west-grid');
+  renderCards(['buf-bos','tbl-mtl','car-ott','pit-phi'], 'east-grid');
+}
+
 function renderStandings() {
   const scores = players.map(p => ({ name: p, ...calcScore(p) }));
   scores.sort((a, b) => b.total - a.total);
@@ -945,6 +809,7 @@ function renderStandings() {
   `).join('');
 }
 
+renderAllCards();
 renderStandings();
 </script>
 </body>

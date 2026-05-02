@@ -523,6 +523,44 @@
 
   .section-gap { margin-bottom: 28px; }
 
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+
+  .tab-btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 8px 24px;
+    border-radius: 6px;
+    border: 1px solid var(--rink-line);
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tab-btn:hover {
+    color: var(--text-main);
+    border-color: var(--gold-dim);
+  }
+
+  .tab-btn.active {
+    background: var(--gold);
+    color: var(--rink);
+    border-color: var(--gold);
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* FADE-IN ANIMATION */
   /* Fade-in animation */
   .series-card {
     animation: fadeUp 0.4s ease both;
@@ -558,14 +596,29 @@
     <div class="legend-item"><div class="legend-dot pending"></div> Pending</div>
   </div>
 
-  <!-- SERIES CARDS — rendered by JS -->
-  <div id="west-label" class="conference-label">Western Conference · First Round</div>
-  <div id="west-grid" class="series-grid section-gap"></div>
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('r1')">Round 1</button>
+    <button class="tab-btn" onclick="switchTab('r2')">Round 2</button>
+  </div>
 
-  <div id="east-label" class="conference-label">Eastern Conference · First Round</div>
-  <div id="east-grid" class="series-grid section-gap"></div>
+  <!-- ROUND 1 -->
+  <div id="tab-r1" class="tab-panel active">
+    <div class="conference-label">Western Conference · First Round</div>
+    <div id="west-grid" class="series-grid section-gap"></div>
+    <div class="conference-label">Eastern Conference · First Round</div>
+    <div id="east-grid" class="series-grid section-gap"></div>
+  </div>
 
-    <!-- SCOREBOARD -->
+  <!-- ROUND 2 -->
+  <div id="tab-r2" class="tab-panel">
+    <div class="conference-label">Western Conference · Second Round</div>
+    <div id="west2-grid" class="series-grid section-gap"></div>
+    <div class="conference-label">Eastern Conference · Second Round</div>
+    <div id="east2-grid" class="series-grid section-gap"></div>
+  </div>
+
+  <!-- SCOREBOARD -->
   <div class="scoreboard">
     <div class="scoreboard-header">
       <span class="trophy">🏒</span>
@@ -579,6 +632,7 @@
           <th class="hide-mobile">Bonus</th>
           <th class="hide-mobile">Consol.</th>
           <th>Rd 1</th>
+          <th>Rd 2</th>
           <th>Total</th>
         </tr>
       </thead>
@@ -601,22 +655,22 @@ const series = [
   { id:'col-lak', team1:'COL', team2:'LAK', winner: 'COL', games: 4, score: {COL:4, LAK:0},
     gameWinners: ['COL','COL','COL','COL'],
     gameScores:  ['2–1','2–1 (OT)','4–2','5–1'] },
-  { id:'dal-min', team1:'DAL', team2:'MIN', winner: null, games: null, score: {DAL:2, MIN:3},
-    gameWinners: ['MIN','DAL','DAL','MIN','MIN'],
-    gameScores:  ['6–1','4–2','4–3 (2OT)','3–2 (OT)','4–2'] },
-  { id:'vgk-uta', team1:'VGK', team2:'UTA', winner: null, games: null, score: {VGK:3, UTA:2},
-    gameWinners: ['VGK','UTA','UTA','VGK','VGK'],
-    gameScores:  ['4–2','3–2','4–2','5–4 (OT)','4–3 (2OT)'] },
-  { id:'ana-edm', team1:'EDM', team2:'ANA', winner: null, games: null, score: {EDM:2, ANA:3},
-    gameWinners: ['EDM','ANA','ANA','ANA','EDM'],
-    gameScores:  ['4–3','6–4','7–4','4–3 (OT)','4–1'] },
+  { id:'dal-min', team1:'DAL', team2:'MIN', winner: 'MIN', games: 6, score: {DAL:2, MIN:4},
+    gameWinners: ['MIN','DAL','DAL','MIN','MIN','MIN'],
+    gameScores:  ['6–1','4–2','4–3 (2OT)','3–2 (OT)','4–2','5–2'] },
+  { id:'vgk-uta', team1:'VGK', team2:'UTA', winner: 'VGK', games: 6, score: {VGK:4, UTA:2},
+    gameWinners: ['VGK','UTA','UTA','VGK','VGK','VGK'],
+    gameScores:  ['4–2','3–2','4–2','5–4 (OT)','4–3 (2OT)','5–1'] },
+  { id:'ana-edm', team1:'EDM', team2:'ANA', winner: 'ANA', games: 6, score: {EDM:2, ANA:4},
+    gameWinners: ['EDM','ANA','ANA','ANA','EDM','ANA'],
+    gameScores:  ['4–3','6–4','7–4','4–3 (OT)','4–1','5–2'] },
   // EAST
-  { id:'buf-bos', team1:'BUF', team2:'BOS', winner: null, games: null, score: {BUF:3, BOS:2},
-    gameWinners: ['BUF','BOS','BUF','BUF','BOS'],
-    gameScores:  ['4–3','4–2','3–1','6–1','2–1 (OT)'] },
-  { id:'tbl-mtl', team1:'TBL', team2:'MTL', winner: null, games: null, score: {TBL:2, MTL:3},
-    gameWinners: ['MTL','TBL','MTL','TBL','MTL'],
-    gameScores:  ['4–3 (OT)','3–2 (OT)','3–2 (OT)','3–2','3–2'] },
+  { id:'buf-bos', team1:'BUF', team2:'BOS', winner: 'BUF', games: 6, score: {BUF:4, BOS:2},
+    gameWinners: ['BUF','BOS','BUF','BUF','BOS','BUF'],
+    gameScores:  ['4–3','4–2','3–1','6–1','2–1 (OT)','4–1'] },
+  { id:'tbl-mtl', team1:'TBL', team2:'MTL', winner: null, games: null, score: {TBL:3, MTL:3},
+    gameWinners: ['MTL','TBL','MTL','TBL','MTL','TBL'],
+    gameScores:  ['4–3 (OT)','3–2 (OT)','3–2 (OT)','3–2','3–2','1–0 (OT)'] },
   { id:'car-ott', team1:'CAR', team2:'OTT', winner: 'CAR', games: 4, score: {CAR:4, OTT:0},
     gameWinners: ['CAR','CAR','CAR','CAR'],
     gameScores:  ['2–0','3–2 (2OT)','2–1','4–2'] },
@@ -658,19 +712,52 @@ const picks = {
   ],
 };
 
+// ── ROUND 2 DATA ──────────────────────────────
+const series2 = [
+  // WEST
+  { id:'col-min', team1:'COL', team2:'MIN', winner: null, games: null, score: {COL:0, MIN:0},
+    gameWinners: [], gameScores: [] },
+  { id:'vgk-ana', team1:'VGK', team2:'ANA', winner: null, games: null, score: {VGK:0, ANA:0},
+    gameWinners: [], gameScores: [] },
+  // EAST
+  { id:'car-phi', team1:'CAR', team2:'PHI', winner: null, games: null, score: {CAR:0, PHI:0},
+    gameWinners: [], gameScores: [] },
+  { id:'buf-tbd', team1:'BUF', team2:'TBD', winner: null, games: null, score: {BUF:0, TBD:0},
+    gameWinners: [], gameScores: [], pending: true },
+];
+
+const picks2 = {
+  Harlan: [
+    { seriesId:'col-min', winner:'COL', games:4 },
+    { seriesId:'vgk-ana', winner:'VGK', games:7 },
+    { seriesId:'car-phi', winner:'CAR', games:5 },
+    // buf-tbd: TBD
+  ],
+  Ashtin: [
+    { seriesId:'col-min', winner:'COL', games:5 },
+    { seriesId:'vgk-ana', winner:'ANA', games:6 },
+    { seriesId:'car-phi', winner:'CAR', games:6 },
+    // buf-tbd: TBD
+  ],
+  Sean: [
+    { seriesId:'col-min', winner:'COL', games:6 },
+    { seriesId:'vgk-ana', winner:'VGK', games:6 },
+    { seriesId:'car-phi', winner:'CAR', games:6 },
+    // buf-tbd: TBD
+  ],
+};
+
 const players = ['Harlan', 'Ashtin', 'Sean'];
-const MAX_POINTS = series.length * 8; // max per series: 5 winner + 3 exact games
 
 // Scoring:
 //   Correct winner:  5 pts
 //   Games bonus (if winner correct): exact=+3, off by 1=+2, off by 2=+1
 //   Consolation: picked 7 games AND series goes 7, even if wrong team: +2
-function calcScore(player) {
+function scoreRound(playerPicks, seriesData) {
   let winnerPts = 0, bonusPts = 0, consolationPts = 0;
-  picks[player].forEach(pick => {
-    const s = series.find(x => x.id === pick.seriesId);
+  playerPicks.forEach(pick => {
+    const s = seriesData.find(x => x.id === pick.seriesId);
     if (!s || s.winner === null) return;
-
     if (pick.winner === s.winner) {
       winnerPts += 5;
       const diff = Math.abs(pick.games - s.games);
@@ -678,14 +765,23 @@ function calcScore(player) {
       else if (diff === 1) bonusPts += 2;
       else if (diff === 2) bonusPts += 1;
     } else {
-      // Consolation: wrong winner but both picked and actual series = 7
       if (pick.games === 7 && s.games === 7) consolationPts += 2;
     }
   });
-  const total = winnerPts + bonusPts + consolationPts;
-  // grandTotal = sum across all rounds (Round 2+ will be added here later)
-  const grandTotal = total;
-  return { winnerPts, bonusPts, consolationPts, total, grandTotal };
+  return { winnerPts, bonusPts, consolationPts, total: winnerPts + bonusPts + consolationPts };
+}
+
+function calcScore(player) {
+  const r1 = scoreRound(picks[player], series);
+  const r2 = scoreRound(picks2[player] || [], series2);
+  return {
+    winnerPts: r1.winnerPts + r2.winnerPts,
+    bonusPts: r1.bonusPts + r2.bonusPts,
+    consolationPts: r1.consolationPts + r2.consolationPts,
+    r1Total: r1.total,
+    r2Total: r2.total,
+    grandTotal: r1.total + r2.total,
+  };
 }
 
 // Team color map for pick winner text colors
@@ -748,12 +844,14 @@ function getStatusHTML(s) {
   return `<div class="series-status">Pending</div>`;
 }
 
-function renderCards(seriesIds, containerId) {
+function renderCards(seriesIds, containerId, seriesData) {
   const container = document.getElementById(containerId);
   container.innerHTML = seriesIds.map(id => {
-    const s = series.find(x => x.id === id);
+    const s = seriesData.find(x => x.id === id);
     const playerList = players.map(player => {
-      const pick = picks[player].find(p => p.seriesId === id);
+      const allPicks = [...(picks[player]||[]), ...(picks2[player]||[])];
+      const pick = allPicks.find(p => p.seriesId === id);
+      if (!pick) return '';
       const ind = getPickIndicator(pick, s);
       const indClass = ind === 'consolation' ? 'correct' : ind;
       return `
@@ -767,6 +865,20 @@ function renderCards(seriesIds, containerId) {
         </div>`;
     }).join('');
 
+    if (s.pending) {
+      return `
+      <div class="series-card">
+        <div class="series-header">
+          <div class="matchup">
+            <span class="team-badge ${teamClass[s.team1]}">${s.team1}</span>
+            <span class="matchup-vs">vs</span>
+            <span class="team-badge" style="background:#1a3a6b;color:var(--text-dim)">TBD</span>
+          </div>
+          <div class="series-status">Awaiting G7</div>
+        </div>
+        <div class="picks-body" style="padding:12px 16px;color:var(--text-dim);font-size:13px;font-style:italic">Picks pending Game 7 result</div>
+      </div>`;
+    }
     return `
       <div class="series-card">
         <div class="series-header">
@@ -784,13 +896,22 @@ function renderCards(seriesIds, containerId) {
 }
 
 function renderAllCards() {
-  renderCards(['col-lak','dal-min','vgk-uta','ana-edm'], 'west-grid');
-  renderCards(['buf-bos','tbl-mtl','car-ott','pit-phi'], 'east-grid');
+  renderCards(['col-lak','dal-min','vgk-uta','ana-edm'], 'west-grid', series);
+  renderCards(['buf-bos','tbl-mtl','car-ott','pit-phi'], 'east-grid', series);
+  renderCards(['col-min','vgk-ana'], 'west2-grid', series2);
+  renderCards(['car-phi','buf-tbd'], 'east2-grid', series2);
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
 }
 
 function renderStandings() {
   const scores = players.map(p => ({ name: p, ...calcScore(p) }));
-  scores.sort((a, b) => b.total - a.total);
+  scores.sort((a, b) => b.grandTotal - a.grandTotal);
   const rankClasses = ['r1', 'r2', 'r3'];
 
   const tbody = document.getElementById('standings-body');
@@ -803,7 +924,8 @@ function renderStandings() {
       <td class="hide-mobile"><span class="score-num">${s.winnerPts}</span></td>
       <td class="hide-mobile"><span class="score-num">${s.bonusPts}</span></td>
       <td class="hide-mobile"><span class="score-num">${s.consolationPts}</span></td>
-      <td><span class="score-num">${s.total}</span></td>
+      <td><span class="score-num">${s.r1Total}</span></td>
+      <td><span class="score-num">${s.r2Total}</span></td>
       <td><span class="score-num ${i === 0 ? 'best' : ''}">${s.grandTotal}</span></td>
     </tr>
   `).join('');

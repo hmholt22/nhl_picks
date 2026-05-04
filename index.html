@@ -668,9 +668,9 @@ const series = [
   { id:'buf-bos', team1:'BUF', team2:'BOS', winner: 'BUF', games: 6, score: {BUF:4, BOS:2},
     gameWinners: ['BUF','BOS','BUF','BUF','BOS','BUF'],
     gameScores:  ['4–3','4–2','3–1','6–1','2–1 (OT)','4–1'] },
-  { id:'tbl-mtl', team1:'TBL', team2:'MTL', winner: null, games: null, score: {TBL:3, MTL:3},
-    gameWinners: ['MTL','TBL','MTL','TBL','MTL','TBL'],
-    gameScores:  ['4–3 (OT)','3–2 (OT)','3–2 (OT)','3–2','3–2','1–0 (OT)'] },
+  { id:'tbl-mtl', team1:'TBL', team2:'MTL', winner: 'MTL', games: 7, score: {TBL:3, MTL:4},
+    gameWinners: ['MTL','TBL','MTL','TBL','MTL','TBL','MTL'],
+    gameScores:  ['4–3 (OT)','3–2 (OT)','3–2 (OT)','3–2','3–2','1–0 (OT)','2–1'] },
   { id:'car-ott', team1:'CAR', team2:'OTT', winner: 'CAR', games: 4, score: {CAR:4, OTT:0},
     gameWinners: ['CAR','CAR','CAR','CAR'],
     gameScores:  ['2–0','3–2 (2OT)','2–1','4–2'] },
@@ -715,15 +715,15 @@ const picks = {
 // ── ROUND 2 DATA ──────────────────────────────
 const series2 = [
   // WEST
-  { id:'col-min', team1:'COL', team2:'MIN', winner: null, games: null, score: {COL:0, MIN:0},
-    gameWinners: [], gameScores: [] },
+  { id:'col-min', team1:'COL', team2:'MIN', winner: null, games: null, score: {COL:1, MIN:0},
+    gameWinners: ['COL'], gameScores: ['9–6'] },
   { id:'vgk-ana', team1:'VGK', team2:'ANA', winner: null, games: null, score: {VGK:0, ANA:0},
     gameWinners: [], gameScores: [] },
   // EAST
-  { id:'car-phi', team1:'CAR', team2:'PHI', winner: null, games: null, score: {CAR:0, PHI:0},
+  { id:'car-phi', team1:'CAR', team2:'PHI', winner: null, games: null, score: {CAR:1, PHI:0},
+    gameWinners: ['CAR'], gameScores: ['3–0'] },
+  { id:'buf-mtl', team1:'BUF', team2:'MTL', winner: null, games: null, score: {BUF:0, MTL:0},
     gameWinners: [], gameScores: [] },
-  { id:'buf-tbd', team1:'BUF', team2:'TBD', winner: null, games: null, score: {BUF:0, TBD:0},
-    gameWinners: [], gameScores: [], pending: true },
 ];
 
 const picks2 = {
@@ -731,19 +731,19 @@ const picks2 = {
     { seriesId:'col-min', winner:'COL', games:4 },
     { seriesId:'vgk-ana', winner:'VGK', games:7 },
     { seriesId:'car-phi', winner:'CAR', games:5 },
-    // buf-tbd: TBD
+    { seriesId:'buf-mtl', winner:'MTL', games:7 },
   ],
   Ashtin: [
     { seriesId:'col-min', winner:'COL', games:5 },
     { seriesId:'vgk-ana', winner:'ANA', games:6 },
     { seriesId:'car-phi', winner:'CAR', games:6 },
-    // buf-tbd: TBD
+    { seriesId:'buf-mtl', winner:'BUF', games:6 },
   ],
   Sean: [
     { seriesId:'col-min', winner:'COL', games:6 },
     { seriesId:'vgk-ana', winner:'VGK', games:6 },
     { seriesId:'car-phi', winner:'CAR', games:6 },
-    // buf-tbd: TBD
+    { seriesId:'buf-mtl', winner:'MTL', games:7 },
   ],
 };
 
@@ -788,7 +788,7 @@ function calcScore(player) {
 const teamColors = {
   COL:'#c4a0ac', LAK:'#a2aaad', DAL:'#7ab89a', MIN:'#ddaf39',
   VGK:'#c8ba8e', UTA:'#aaa', ANA:'#f7a878', EDM:'#ff7033',
-  BUF:'#fcb514', BOS:'#fcb514', TBL:'#8ab0e0', MTL:'#d08090',
+  BUF:'#fcb514', BOS:'#fcb514', TBL:'#8ab0e0', MTL:'#d08090', TBD:'#555',
   CAR:'#ff6666', OTT:'#e31837', PIT:'#fcb514', PHI:'#f78050',
 };
 
@@ -899,7 +899,7 @@ function renderAllCards() {
   renderCards(['col-lak','dal-min','vgk-uta','ana-edm'], 'west-grid', series);
   renderCards(['buf-bos','tbl-mtl','car-ott','pit-phi'], 'east-grid', series);
   renderCards(['col-min','vgk-ana'], 'west2-grid', series2);
-  renderCards(['car-phi','buf-tbd'], 'east2-grid', series2);
+  renderCards(['car-phi','buf-mtl'], 'east2-grid', series2);
 }
 
 function switchTab(tab) {

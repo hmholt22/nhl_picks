@@ -598,12 +598,12 @@
 
   <!-- TABS -->
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('r1')">Round 1</button>
-    <button class="tab-btn" onclick="switchTab('r2')">Round 2</button>
+    <button class="tab-btn" onclick="switchTab('r1')">Round 1</button>
+    <button class="tab-btn active" onclick="switchTab('r2')">Round 2</button>
   </div>
 
   <!-- ROUND 1 -->
-  <div id="tab-r1" class="tab-panel active">
+  <div id="tab-r1" class="tab-panel">
     <div class="conference-label">Western Conference · First Round</div>
     <div id="west-grid" class="series-grid section-gap"></div>
     <div class="conference-label">Eastern Conference · First Round</div>
@@ -611,7 +611,7 @@
   </div>
 
   <!-- ROUND 2 -->
-  <div id="tab-r2" class="tab-panel">
+  <div id="tab-r2" class="tab-panel active">
     <div class="conference-label">Western Conference · Second Round</div>
     <div id="west2-grid" class="series-grid section-gap"></div>
     <div class="conference-label">Eastern Conference · Second Round</div>

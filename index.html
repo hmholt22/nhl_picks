@@ -715,15 +715,15 @@ const picks = {
 // ── ROUND 2 DATA ──────────────────────────────
 const series2 = [
   // WEST
-  { id:'col-min', team1:'COL', team2:'MIN', winner: null, games: null, score: {COL:2, MIN:0},
-    gameWinners: ['COL','COL'], gameScores: ['9–6','5–2'] },
-  { id:'vgk-ana', team1:'VGK', team2:'ANA', winner: null, games: null, score: {VGK:1, ANA:0},
-    gameWinners: ['VGK'], gameScores: ['3–1'] },
+  { id:'col-min', team1:'COL', team2:'MIN', winner: null, games: null, score: {COL:3, MIN:1},
+    gameWinners: ['COL','COL','MIN','COL'], gameScores: ['9–6','5–2','5–1','5–2'] },
+  { id:'vgk-ana', team1:'VGK', team2:'ANA', winner: null, games: null, score: {VGK:2, ANA:2},
+    gameWinners: ['VGK','ANA','VGK','ANA'], gameScores: ['3–1','3–1','6–2','4–3'] },
   // EAST
-  { id:'car-phi', team1:'CAR', team2:'PHI', winner: null, games: null, score: {CAR:2, PHI:0},
-    gameWinners: ['CAR','CAR'], gameScores: ['3–0','3–2 (OT)'] },
-  { id:'buf-mtl', team1:'BUF', team2:'MTL', winner: null, games: null, score: {BUF:0, MTL:0},
-    gameWinners: [], gameScores: [] },
+  { id:'car-phi', team1:'CAR', team2:'PHI', winner: 'CAR', games: 4, score: {CAR:4, PHI:0},
+    gameWinners: ['CAR','CAR','CAR','CAR'], gameScores: ['3–0','3–2 (OT)','4–1','3–2 (OT)'] },
+  { id:'buf-mtl', team1:'BUF', team2:'MTL', winner: null, games: null, score: {BUF:2, MTL:2},
+    gameWinners: ['BUF','MTL','MTL','BUF'], gameScores: ['5–1','5–1','6–2','3–2'] },
 ];
 
 const picks2 = {

@@ -599,7 +599,8 @@
   <!-- TABS -->
   <div class="tabs">
     <button class="tab-btn" onclick="switchTab('r1')">Round 1</button>
-    <button class="tab-btn active" onclick="switchTab('r2')">Round 2</button>
+    <button class="tab-btn" onclick="switchTab('r2')">Round 2</button>
+    <button class="tab-btn active" onclick="switchTab('r3')">Conf. Finals</button>
   </div>
 
   <!-- ROUND 1 -->
@@ -611,11 +612,19 @@
   </div>
 
   <!-- ROUND 2 -->
-  <div id="tab-r2" class="tab-panel active">
+  <div id="tab-r2" class="tab-panel">
     <div class="conference-label">Western Conference · Second Round</div>
     <div id="west2-grid" class="series-grid section-gap"></div>
     <div class="conference-label">Eastern Conference · Second Round</div>
     <div id="east2-grid" class="series-grid section-gap"></div>
+  </div>
+
+  <!-- ROUND 3 -->
+  <div id="tab-r3" class="tab-panel active">
+    <div class="conference-label">Western Conference · Conference Final</div>
+    <div id="west3-grid" class="series-grid section-gap"></div>
+    <div class="conference-label">Eastern Conference · Conference Final</div>
+    <div id="east3-grid" class="series-grid section-gap"></div>
   </div>
 
   <!-- SCOREBOARD -->
@@ -632,7 +641,7 @@
           <th class="hide-mobile">Bonus</th>
           <th class="hide-mobile">Consol.</th>
           <th>Rd 1</th>
-          <th>Rd 2</th>
+          <th>Rd 2+</th>
           <th>Total</th>
         </tr>
       </thead>
@@ -715,16 +724,31 @@ const picks = {
 // ── ROUND 2 DATA ──────────────────────────────
 const series2 = [
   // WEST
-  { id:'col-min', team1:'COL', team2:'MIN', winner: null, games: null, score: {COL:3, MIN:1},
-    gameWinners: ['COL','COL','MIN','COL'], gameScores: ['9–6','5–2','5–1','5–2'] },
-  { id:'vgk-ana', team1:'VGK', team2:'ANA', winner: null, games: null, score: {VGK:2, ANA:2},
-    gameWinners: ['VGK','ANA','VGK','ANA'], gameScores: ['3–1','3–1','6–2','4–3'] },
+  { id:'col-min', team1:'COL', team2:'MIN', winner: 'COL', games: 5, score: {COL:4, MIN:1},
+    gameWinners: ['COL','COL','MIN','COL','COL'], gameScores: ['9–6','5–2','5–1','5–2','4–3 (OT)'] },
+  { id:'vgk-ana', team1:'VGK', team2:'ANA', winner: 'VGK', games: 6, score: {VGK:4, ANA:2},
+    gameWinners: ['VGK','ANA','VGK','ANA','VGK','VGK'], gameScores: ['3–1','3–1','6–2','4–3','3–2 (OT)','5–1'] },
   // EAST
   { id:'car-phi', team1:'CAR', team2:'PHI', winner: 'CAR', games: 4, score: {CAR:4, PHI:0},
     gameWinners: ['CAR','CAR','CAR','CAR'], gameScores: ['3–0','3–2 (OT)','4–1','3–2 (OT)'] },
-  { id:'buf-mtl', team1:'BUF', team2:'MTL', winner: null, games: null, score: {BUF:2, MTL:2},
-    gameWinners: ['BUF','MTL','MTL','BUF'], gameScores: ['5–1','5–1','6–2','3–2'] },
+  { id:'buf-mtl', team1:'BUF', team2:'MTL', winner: 'MTL', games: 7, score: {BUF:3, MTL:4},
+    gameWinners: ['BUF','MTL','MTL','BUF','MTL','BUF','MTL'], gameScores: ['5–1','5–1','6–2','3–2','6–3','8–3','3–2 (OT)'] },
 ];
+
+const series3 = [
+  // WEST
+  { id:'col-vgk', team1:'COL', team2:'VGK', winner: null, games: null, score: {COL:0, VGK:0},
+    gameWinners: [], gameScores: [] },
+  // EAST
+  { id:'car-mtl', team1:'CAR', team2:'MTL', winner: null, games: null, score: {CAR:0, MTL:0},
+    gameWinners: [], gameScores: [] },
+];
+
+const picks3 = {
+  Harlan: [],
+  Ashtin: [],
+  Sean: [],
+};
 
 const picks2 = {
   Harlan: [
@@ -774,13 +798,14 @@ function scoreRound(playerPicks, seriesData) {
 function calcScore(player) {
   const r1 = scoreRound(picks[player], series);
   const r2 = scoreRound(picks2[player] || [], series2);
+  const r3 = scoreRound(picks3[player] || [], series3);
   return {
-    winnerPts: r1.winnerPts + r2.winnerPts,
-    bonusPts: r1.bonusPts + r2.bonusPts,
-    consolationPts: r1.consolationPts + r2.consolationPts,
+    winnerPts: r1.winnerPts + r2.winnerPts + r3.winnerPts,
+    bonusPts: r1.bonusPts + r2.bonusPts + r3.bonusPts,
+    consolationPts: r1.consolationPts + r2.consolationPts + r3.consolationPts,
     r1Total: r1.total,
-    r2Total: r2.total,
-    grandTotal: r1.total + r2.total,
+    r2Total: r2.total + r3.total,
+    grandTotal: r1.total + r2.total + r3.total,
   };
 }
 
@@ -849,7 +874,7 @@ function renderCards(seriesIds, containerId, seriesData) {
   container.innerHTML = seriesIds.map(id => {
     const s = seriesData.find(x => x.id === id);
     const playerList = players.map(player => {
-      const allPicks = [...(picks[player]||[]), ...(picks2[player]||[])];
+      const allPicks = [...(picks[player]||[]), ...(picks2[player]||[]), ...(picks3[player]||[])];
       const pick = allPicks.find(p => p.seriesId === id);
       if (!pick) return '';
       const ind = getPickIndicator(pick, s);
@@ -900,6 +925,8 @@ function renderAllCards() {
   renderCards(['buf-bos','tbl-mtl','car-ott','pit-phi'], 'east-grid', series);
   renderCards(['col-min','vgk-ana'], 'west2-grid', series2);
   renderCards(['car-phi','buf-mtl'], 'east2-grid', series2);
+  renderCards(['col-vgk'], 'west3-grid', series3);
+  renderCards(['car-mtl'], 'east3-grid', series3);
 }
 
 function switchTab(tab) {

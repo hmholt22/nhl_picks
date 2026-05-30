@@ -600,7 +600,8 @@
   <div class="tabs">
     <button class="tab-btn" onclick="switchTab('r1')">Round 1</button>
     <button class="tab-btn" onclick="switchTab('r2')">Round 2</button>
-    <button class="tab-btn active" onclick="switchTab('r3')">Conf. Finals</button>
+    <button class="tab-btn" onclick="switchTab('r3')">Conf. Finals</button>
+    <button class="tab-btn active" onclick="switchTab('r4')">Stanley Cup</button>
   </div>
 
   <!-- ROUND 1 -->
@@ -620,11 +621,17 @@
   </div>
 
   <!-- ROUND 3 -->
-  <div id="tab-r3" class="tab-panel active">
+  <div id="tab-r3" class="tab-panel">
     <div class="conference-label">Western Conference · Conference Final</div>
     <div id="west3-grid" class="series-grid section-gap"></div>
     <div class="conference-label">Eastern Conference · Conference Final</div>
     <div id="east3-grid" class="series-grid section-gap"></div>
+  </div>
+
+  <!-- STANLEY CUP FINALS -->
+  <div id="tab-r4" class="tab-panel active">
+    <div class="conference-label">Stanley Cup Finals</div>
+    <div id="finals-grid" class="series-grid section-gap" style="grid-template-columns: 1fr;max-width:560px;margin:0 auto 14px;"></div>
   </div>
 
   <!-- SCOREBOARD -->
@@ -737,12 +744,23 @@ const series2 = [
 
 const series3 = [
   // WEST
-  { id:'col-vgk', team1:'COL', team2:'VGK', winner: null, games: null, score: {COL:0, VGK:2},
-    gameWinners: ['VGK','VGK'], gameScores: ['4–2','3–1'] },
+  { id:'col-vgk', team1:'COL', team2:'VGK', winner: 'VGK', games: 4, score: {COL:0, VGK:4},
+    gameWinners: ['VGK','VGK','VGK','VGK'], gameScores: ['4–2','3–1','4–3','2–1'] },
   // EAST
-  { id:'car-mtl', team1:'CAR', team2:'MTL', winner: null, games: null, score: {CAR:0, MTL:1},
-    gameWinners: ['MTL'], gameScores: ['6–2'] },
+  { id:'car-mtl', team1:'CAR', team2:'MTL', winner: 'CAR', games: 5, score: {CAR:4, MTL:1},
+    gameWinners: ['MTL','CAR','CAR','CAR','CAR'], gameScores: ['6–2','3–2 (OT)','3–2 (OT)','4–0','6–1'] },
 ];
+
+const series4 = [
+  { id:'car-vgk', team1:'CAR', team2:'VGK', winner: null, games: null, score: {CAR:0, VGK:0},
+    gameWinners: [], gameScores: [] },
+];
+
+const picks4 = {
+  Harlan: [],
+  Ashtin: [],
+  Sean: [],
+};
 
 const picks3 = {
   Harlan: [
@@ -808,13 +826,14 @@ function calcScore(player) {
   const r1 = scoreRound(picks[player], series);
   const r2 = scoreRound(picks2[player] || [], series2);
   const r3 = scoreRound(picks3[player] || [], series3);
+  const r4 = scoreRound(picks4[player] || [], series4);
   return {
-    winnerPts: r1.winnerPts + r2.winnerPts + r3.winnerPts,
-    bonusPts: r1.bonusPts + r2.bonusPts + r3.bonusPts,
-    consolationPts: r1.consolationPts + r2.consolationPts + r3.consolationPts,
+    winnerPts: r1.winnerPts + r2.winnerPts + r3.winnerPts + r4.winnerPts,
+    bonusPts: r1.bonusPts + r2.bonusPts + r3.bonusPts + r4.bonusPts,
+    consolationPts: r1.consolationPts + r2.consolationPts + r3.consolationPts + r4.consolationPts,
     r1Total: r1.total,
-    r2Total: r2.total + r3.total,
-    grandTotal: r1.total + r2.total + r3.total,
+    r2Total: r2.total + r3.total + r4.total,
+    grandTotal: r1.total + r2.total + r3.total + r4.total,
   };
 }
 
@@ -883,7 +902,7 @@ function renderCards(seriesIds, containerId, seriesData) {
   container.innerHTML = seriesIds.map(id => {
     const s = seriesData.find(x => x.id === id);
     const playerList = players.map(player => {
-      const allPicks = [...(picks[player]||[]), ...(picks2[player]||[]), ...(picks3[player]||[])];
+      const allPicks = [...(picks[player]||[]), ...(picks2[player]||[]), ...(picks3[player]||[]), ...(picks4[player]||[])];
       const pick = allPicks.find(p => p.seriesId === id);
       if (!pick) return '';
       const ind = getPickIndicator(pick, s);
@@ -936,6 +955,7 @@ function renderAllCards() {
   renderCards(['car-phi','buf-mtl'], 'east2-grid', series2);
   renderCards(['col-vgk'], 'west3-grid', series3);
   renderCards(['car-mtl'], 'east3-grid', series3);
+  renderCards(['car-vgk'], 'finals-grid', series4);
 }
 
 function switchTab(tab) {

@@ -757,9 +757,15 @@ const series4 = [
 ];
 
 const picks4 = {
-  Harlan: [],
-  Ashtin: [],
-  Sean: [],
+  Harlan: [
+    { seriesId:'car-vgk', winner:'CAR', games:6 },
+  ],
+  Ashtin: [
+    { seriesId:'car-vgk', winner:'CAR', games:3 },
+  ],
+  Sean: [
+    { seriesId:'car-vgk', winner:'CAR', games:6 },
+  ],
 };
 
 const picks3 = {
@@ -907,12 +913,15 @@ function renderCards(seriesIds, containerId, seriesData) {
       if (!pick) return '';
       const ind = getPickIndicator(pick, s);
       const indClass = ind === 'consolation' ? 'correct' : ind;
+      const isSecondComing = pick.seriesId === 'car-vgk' && pick.games === 3;
+      const gamesLabel = isSecondComing ? `in 3 ✝️` : `in ${pick.games}`;
+      const gamesTitle = isSecondComing ? 'title="Jesus returns after Game 3, series over"' : '';
       return `
         <div class="pick-row">
           <div class="picker-name">${player}</div>
           <div class="pick-detail">
             <span class="pick-winner" style="color:${teamColors[pick.winner]}">${pick.winner}</span>
-            <span class="pick-games">in ${pick.games}</span>
+            <span class="pick-games" ${gamesTitle} style="${isSecondComing ? 'color:var(--gold);cursor:help;' : ''}">${gamesLabel}</span>
           </div>
           <div class="pick-indicator ${indClass}"></div>
         </div>`;
